@@ -69,6 +69,8 @@ public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
 		{
 			BaseTypeDeclarationSyntax typeNode =>
 				typeNode.Modifiers.FirstOrDefault(m => m.IsKind(SyntaxKind.InternalKeyword) || m.IsKind(SyntaxKind.PrivateKeyword)),
+			DelegateDeclarationSyntax delegateNode =>
+				delegateNode.Modifiers.FirstOrDefault(m => m.IsKind(SyntaxKind.InternalKeyword) || m.IsKind(SyntaxKind.PrivateKeyword)),
 			_ => null
 		};
 

@@ -113,4 +113,70 @@ public class PublicsArePublicAnalyzerTests
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
     }
+
+	[Fact]
+	public async Task DiagnosticAppearsOnInternalClassInNestedPublicNamespace()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Public.SubNamespace;
+		                          {|{{PublicsArePublicAnalyzer.DIAGNOSTIC_ID}}:internal|} class MyClass;
+		                          """;
+		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+		await test.RunAsync();
+	}
+
+	[Fact]
+	public async Task DiagnosticAppearsOnInternalDelegate()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Public;
+		                          {|{{PublicsArePublicAnalyzer.DIAGNOSTIC_ID}}:internal|} delegate void MyDelegate();
+		                          """;
+		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+		await test.RunAsync();
+	}
+
+	[Fact]
+	public async Task DiagnosticDoesntAppearOnPublicDelegate()
+	{
+		const string testCode = """
+		                        namespace TestApp.Public;
+		                        public delegate void MyDelegate();
+		                        """;
+		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+		await test.RunAsync();
+	}
+
+	[Fact]
+	public async Task DiagnosticAppearsOnInternalGenericClass()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Public;
+		                          {|{{PublicsArePublicAnalyzer.DIAGNOSTIC_ID}}:internal|} class MyClass<T>;
+		                          """;
+		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+		await test.RunAsync();
+	}
+
+	[Fact]
+	public async Task DiagnosticDoesntAppearOnPublicGenericClass()
+	{
+		const string testCode = """
+		                        namespace TestApp.Public;
+		                        public class MyClass<T>;
+		                        """;
+		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+		await test.RunAsync();
+	}
+
+	[Fact]
+	public async Task NoDiagnosticOnInternalClassInInternalNamespaceContainingPublicFragment()
+	{
+		const string testCode = """
+		                        namespace TestApp.Internal.PublicStuff;
+		                        internal class MyClass;
+		                        """;
+		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+		await test.RunAsync();
+	}
 }
