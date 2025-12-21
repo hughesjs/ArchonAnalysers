@@ -12,7 +12,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class MyClass;
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
@@ -23,9 +23,9 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                   {
-                                        {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:protected|} class MyClass;
+                                        {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:protected|} class MyClass;
                                   }
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
@@ -37,7 +37,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                   {
                                     internal class MyClass;
                                   }
@@ -90,9 +90,9 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                   {
-                                      {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:protected|} internal class MyClass;
+                                      {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:protected|} internal class MyClass;
                                   }
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
@@ -129,7 +129,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                 namespace TestApp.Internal;
-                                {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                 {
                                     private class MyClass;
                                 }
@@ -143,7 +143,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                 namespace TestApp.Internal;
-                                {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                 {
                                     private protected class MyClass;
                                 }
@@ -157,7 +157,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} record MyRecord;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} record MyRecord;
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
@@ -168,7 +168,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} struct MyStruct;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} struct MyStruct;
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
@@ -179,7 +179,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} interface IMyInterface;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} interface IMyInterface;
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
@@ -190,7 +190,7 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} enum MyEnum;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} enum MyEnum;
                                   """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
@@ -218,11 +218,11 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                 namespace TestApp.Internal;
-                                {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                 {
-                                    {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MiddleClass
+                                    {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class MiddleClass
                                     {
-                                        {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class InnerClass;
+                                        {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class InnerClass;
                                     }
                                 }
                                 """;
@@ -235,9 +235,9 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                 namespace TestApp.Internal;
-                                {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OutermostClass
+                                {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OutermostClass
                                 {
-                                    {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                    {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                     {
                                         internal class MiddleClass
                                         {
@@ -255,13 +255,79 @@ public class InternalsAreInternalAnalyzerTests
     {
         const string testCode = $$"""
                                 namespace TestApp.Internal;
-                                {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class OuterClass
                                 {
-                                    {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:protected|} class MiddleClass
+                                    {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:protected|} class MiddleClass
                                     {
-                                        {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class InnerClass;
+                                        {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class InnerClass;
                                     }
                                 }
+                                """;
+        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task DiagnosticAppearsOnPublicClassInNestedInternalNamespace()
+    {
+        const string testCode = $$"""
+                                  namespace TestApp.Internal.SubNamespace;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class MyClass;
+                                  """;
+        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task DiagnosticAppearsOnPublicDelegate()
+    {
+        const string testCode = $$"""
+                                  namespace TestApp.Internal;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} delegate void MyDelegate();
+                                  """;
+        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task DiagnosticDoesntAppearOnInternalDelegate()
+    {
+        const string testCode = """
+                                namespace TestApp.Internal;
+                                internal delegate void MyDelegate();
+                                """;
+        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task DiagnosticAppearsOnPublicGenericClass()
+    {
+        const string testCode = $$"""
+                                  namespace TestApp.Internal;
+                                  {|{{InternalsAreInternalAnalyzer.DIAGNOSTIC_ID}}:public|} class MyClass<T>;
+                                  """;
+        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task DiagnosticDoesntAppearOnInternalGenericClass()
+    {
+        const string testCode = """
+                                namespace TestApp.Internal;
+                                internal class MyClass<T>;
+                                """;
+        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task NoDiagnosticOnPublicClassInPublicNamespaceContainingInternalFragment()
+    {
+        const string testCode = """
+                                namespace TestApp.Public.InternalStuff;
+                                public class MyClass;
                                 """;
         CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync();
