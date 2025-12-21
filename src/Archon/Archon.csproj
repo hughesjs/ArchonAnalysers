@@ -52,7 +52,8 @@
   <!-- Package Contents -->
   <ItemGroup>
     <!-- Include README in package -->
-    <None Include="../../README.md" Pack="true" PackagePath="/" Visible="false" />
+      <None Include="../../README.md" CopyToOutputDirectory="Always" Condition="Exists('../../README.md')" />
+      <None Include="$(OutputPath)README.md" Pack="true" PackagePath="/" />
 
     <!-- Package analyzer assemblies -->
     <None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
