@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="Archon.Tests.Unit/Archon.Tests.Unit.csproj" />
+    <Project Path="Archon/Archon.csproj" />
+  </Folder>
+</Solution>

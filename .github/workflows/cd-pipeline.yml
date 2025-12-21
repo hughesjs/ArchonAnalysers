@@ -1,0 +1,239 @@
+name: CD Pipeline
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "src/Archon/**"
+      - "!src/Archon.Tests*/**"
+      - "!**/*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
+jobs:
+  version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.semver-outputs.outputs.version }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get Next Semantic Version
+        id: semver
+        uses: ietf-tools/semver-action@v1.9.0
+        with:
+          token: ${{ github.token }}
+          branch: master
+          patchList: fix, bugfix, perf, refactor, test, tests, chore, patch
+          majorList: major, breaking
+          minorList: minor, feat, feature
+          noVersionBumpBehavior: patch
+          noNewCommitBehavior: patch
+
+      - name: Output SemVer
+        id: semver-outputs
+        run: echo "version=${{ steps.semver.outputs.nextStrict }}" >> $GITHUB_OUTPUT
+
+  build-solution:
+    name: Build Solution
+    runs-on: ubuntu-latest
+    needs: version
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+          dotnet-quality: "preview"
+
+      - name: Restore Dependencies
+        working-directory: src
+        run: dotnet restore Archon.slnx --packages ./.nuget/packages
+
+      - name: Build Solution
+        working-directory: src
+        run: dotnet build Archon.slnx --configuration Release --no-restore /p:Version=${{ needs.version.outputs.version }}
+
+      - name: Upload Solution Build Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: solution-build-output
+          path: ./src
+          include-hidden-files: true
+
+  package-library:
+    name: Package Archon
+    runs-on: ubuntu-latest
+    needs:
+      - version
+      - build-solution
+    steps:
+      - name: Download Solution Build
+        uses: actions/download-artifact@v7
+        with:
+          name: solution-build-output
+          path: ./src
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+          dotnet-quality: "preview"
+
+      - name: Package Archon
+        working-directory: src
+        env:
+          NUGET_PACKAGES: ./.nuget/packages
+        run: |
+          dotnet pack Archon/Archon.csproj \
+            --no-build \
+            --no-restore \
+            --configuration Release \
+            --output ./artifacts \
+            /p:Version=${{ needs.version.outputs.version }} \
+            /p:DebugSymbols=false
+
+      - name: Upload Archon Package Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: archon-package-output
+          path: ./src/artifacts/*.nupkg
+
+  run-tests:
+    name: Run Archon Unit Tests
+    runs-on: ubuntu-latest
+    needs: build-solution
+    steps:
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+          dotnet-quality: "preview"
+
+      - name: Download Solution Build
+        uses: actions/download-artifact@v7
+        with:
+          name: solution-build-output
+          path: ./src
+
+      - name: Run Unit Tests
+        timeout-minutes: 5
+        working-directory: ./src/Archon.Tests.Unit/bin/Release/net10.0
+        run: dotnet Archon.Tests.Unit.dll
+
+  publish-release:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    needs:
+      - run-tests
+      - version
+      - package-library
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Tag commit with new version
+        run: |
+          NEW_TAG=v${{ needs.version.outputs.version }}
+          echo "New tag: $NEW_TAG"
+          git tag "$NEW_TAG" || echo "Tag $NEW_TAG already exists"
+          git push origin "$NEW_TAG"
+          echo "newTag=$NEW_TAG" >> $GITHUB_ENV
+
+      - name: Get previous tag
+        id: previousTag
+        run: |
+          name=$(git --no-pager tag --sort=creatordate --merged ${{ github.ref_name }} | tail -2 | head -1)
+          echo "previousTag: $name"
+          echo "previousTag=$name" >> $GITHUB_ENV
+
+      - name: Update CHANGELOG
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          fromTag: ${{ env.newTag }}
+          toTag: ${{ env.previousTag }}
+          writeToFile: false
+
+      - name: Download Archon Package
+        uses: actions/download-artifact@v7
+        with:
+          name: archon-package-output
+          path: ./artifacts
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          allowUpdates: true
+          draft: false
+          makeLatest: true
+          tag: ${{ env.newTag }}
+          name: ${{ env.newTag }}
+          body: ${{ steps.changelog.outputs.changes }}
+          token: ${{ github.token }}
+          artifacts: "artifacts/*.nupkg"
+
+  push-package:
+    name: Push NuGet Packages
+    runs-on: ubuntu-latest
+    needs:
+      - run-tests
+      - package-library
+    steps:
+      - name: Download Archon Package
+        uses: actions/download-artifact@v7
+        with:
+          name: archon-package-output
+          path: ./artifacts
+
+      - name: Publish to GitHub Packages
+        run: |
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+          --name github \
+          --username "username" \
+          --password ${{ secrets.GITHUB_TOKEN }} \
+          --store-password-in-clear-text
+
+          dotnet nuget push "./artifacts/*.nupkg" \
+            --source github \
+            --api-key ${{ secrets.GITHUB_TOKEN }}
+
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Publish to NuGet.org
+        run: |
+          dotnet nuget push "./artifacts/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key ${{steps.login.outputs.NUGET_API_KEY}}
+
+  cleanup-pre-release-builds:
+    name: Delete Old Archon Pre-Releases
+    runs-on: ubuntu-latest
+    needs:
+      - publish-release
+      - push-package
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          owner: ${{ github.repository_owner }}
+          package-name: "Archon"
+          package-type: "nuget"
+          min-versions-to-keep: 0
+          delete-only-pre-release-versions: true

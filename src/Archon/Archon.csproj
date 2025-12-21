@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+  </PropertyGroup>
+
+  <!-- Analyzer Package Configuration -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+
+  <!-- Package Metadata -->
+  <PropertyGroup>
+    <PackageId>Archon</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>James Hughes</Authors>
+    <Company>James Hughes</Company>
+    <Description>Roslyn analysers for enforcing architectural rules in C# projects</Description>
+    <Copyright>Copyright (c) 2025 James Hughes</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/jameshughes89/archon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jameshughes89/archon</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>roslyn;analyser;architecture;rules;csharp</PackageTags>
+  </PropertyGroup>
+
+  <!-- Roslyn Analyzer Dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- InternalsVisibleTo for Testing -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="Archon.Tests.Unit"/>
+  </ItemGroup>
+
+  <!-- Package Contents -->
+  <ItemGroup>
+    <!-- Include README in package -->
+    <None Include="../../README.md" CopyToOutputDirectory="Always" Condition="Exists('../../README.md')" />
+    <None Include="$(OutputPath)README.md" Pack="true" PackagePath="/" />
+
+    <!-- Package analyzer assemblies -->
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+</Project>
