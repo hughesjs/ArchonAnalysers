@@ -26,8 +26,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check if HEAD is already tagged
+        id: check-tag
+        run: |
+          EXISTING_TAG=$(git tag --points-at HEAD | grep '^v' | head -1)
+          if [ -n "$EXISTING_TAG" ]; then
+            echo "Head is already tagged as $EXISTING_TAG"
+            echo "tagged=true" >> $GITHUB_OUTPUT
+            echo "version=${EXISTING_TAG#v}" >> $GITHUB_OUTPUT
+          else
+            echo "Head is not tagged"
+            echo "tagged=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Get Next Semantic Version
         id: semver
+        if: steps.check-tag.outputs.tagged == 'false'
         uses: ietf-tools/semver-action@v1.9.0
         with:
           token: ${{ github.token }}
@@ -37,10 +51,16 @@ jobs:
           minorList: minor, feat, feature
           noVersionBumpBehavior: patch
           noNewCommitBehavior: patch
-
       - name: Output SemVer
         id: semver-outputs
-        run: echo "version=${{ steps.semver.outputs.nextStrict }}" >> $GITHUB_OUTPUT
+        run: |
+          if [ "${{ steps.check-tag.outputs.tagged }}" == "true" ]; then
+            echo "Using existing tag version: ${{ steps.check-tag.outputs.version }}"
+            echo "version=${{ steps.check-tag.outputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "Using new semantic version: ${{ steps.semver.outputs.nextStrict }}"
+            echo "version=${{ steps.semver.outputs.nextStrict }}" >> $GITHUB_OUTPUT
+          fi
 
   build-solution:
     name: Build Solution
@@ -148,8 +168,12 @@ jobs:
         run: |
           NEW_TAG=v${{ needs.version.outputs.version }}
           echo "New tag: $NEW_TAG"
-          git tag "$NEW_TAG" || echo "Tag $NEW_TAG already exists"
-          git push origin "$NEW_TAG"
+          if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
+            echo "Tag $NEW_TAG already exists, skipping tag creation"
+          else
+            git tag "$NEW_TAG"
+            git push origin "$NEW_TAG"
+          fi
           echo "newTag=$NEW_TAG" >> $GITHUB_ENV
 
       - name: Get previous tag
@@ -209,7 +233,8 @@ jobs:
 
           dotnet nuget push "./artifacts/*.nupkg" \
             --source github \
-            --api-key ${{ secrets.GITHUB_TOKEN }}
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
 
       - name: NuGet login (OIDC → temp API key)
         uses: NuGet/login@v1
@@ -221,7 +246,8 @@ jobs:
         run: |
           dotnet nuget push "./artifacts/*.nupkg" \
             --source https://api.nuget.org/v3/index.json \
-            --api-key ${{steps.login.outputs.NUGET_API_KEY}}
+            --api-key ${{steps.login.outputs.NUGET_API_KEY}} \
+            --skip-duplicate
 
   cleanup-pre-release-builds:
     name: Delete Old Archon Pre-Releases

@@ -1,8 +1,8 @@
 # Archon
 
-[![CI Pipeline](https://github.com/hughesjs/archon/actions/workflows/ci-pipeline.yml/badge.svg)](https://github.com/hughesjs/archon/actions/workflows/ci-pipeline.yml)
-[![CD Pipeline](https://github.com/hughesjs/archon/actions/workflows/cd-pipeline.yml/badge.svg)](https://github.com/hughesjs/archon/actions/workflows/cd-pipeline.yml)
-[![NuGet](https://img.shields.io/nuget/v/Archon.svg)](https://www.nuget.org/packages/Archon/)
+[![CI Pipeline](https://img.shields.io/github/actions/workflow/status/hughesjs/archon/ci-pipeline.yml?style=for-the-badge&logo=github)](https://github.com/hughesjs/archon/actions/workflows/ci-pipeline.yml)
+[![CD Pipeline](https://img.shields.io/github/actions/workflow/status/hughesjs/archon/cd-pipeline.yml?style=for-the-badge&logo=github)](https://github.com/hughesjs/archon/actions/workflows/cd-pipeline.yml)
+[![NuGet](https://img.shields.io/nuget/v/Archon?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/Archon/)
 
 Roslyn analysers for enforcing architectural rules in C# projects.
 

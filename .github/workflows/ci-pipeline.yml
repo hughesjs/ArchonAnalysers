@@ -39,6 +39,7 @@ jobs:
           majorList: major, breaking
           minorList: minor, feat, feature
           noVersionBumpBehavior: patch
+          noNewCommitBehavior: patch
           fallbackTag: 'v0.0.0'
 
       - name: Sanitize Semantic Version
