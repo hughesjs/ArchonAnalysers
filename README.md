@@ -2,7 +2,7 @@
 
 [![CI Pipeline](https://img.shields.io/github/actions/workflow/status/hughesjs/archon/ci-pipeline.yml?style=for-the-badge&logo=github)](https://github.com/hughesjs/archon/actions/workflows/ci-pipeline.yml)
 [![CD Pipeline](https://img.shields.io/github/actions/workflow/status/hughesjs/archon/cd-pipeline.yml?style=for-the-badge&logo=github)](https://github.com/hughesjs/archon/actions/workflows/cd-pipeline.yml)
-[![NuGet](https://img.shields.io/nuget/v/Archon?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/Archon/)
+![NuGet Downloads](https://img.shields.io/nuget/dt/Archon?style=for-the-badge&logo=nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FArchon%2F)
 
 Roslyn analysers for enforcing architectural rules in C# projects.
 
