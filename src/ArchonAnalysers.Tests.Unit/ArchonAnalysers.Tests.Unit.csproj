@@ -25,17 +25,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="5.0.0" />
   </ItemGroup>
 
   <!-- Project Reference -->
   <ItemGroup>
     <ProjectReference Include="../ArchonAnalysers/ArchonAnalysers.csproj" />
     <ProjectReference Include="..\ArchonAnalysers.FixProviders\ArchonAnalysers.FixProviders.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing">
-      <HintPath>..\..\..\..\.nuget\packages\microsoft.codeanalysis.csharp.codefix.testing\1.1.2\lib\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
