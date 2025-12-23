@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Archon is a Roslyn analyser package that enforces architectural rules through namespace-based conventions in C# projects. It is distributed as a NuGet package and integrates into the .NET build process to provide compile-time enforcement of architectural patterns.
+ArchonAnalysers is a Roslyn analyser package that enforces architectural rules through namespace-based conventions in C# projects. It is distributed as a NuGet package and integrates into the .NET build process to provide compile-time enforcement of architectural patterns.
 
 ## Common Commands
 
@@ -20,8 +20,8 @@ dotnet build Archon.slnx
 # Build first, then run from output directory
 cd src
 dotnet build Archon.slnx -c Release
-cd Archon.Tests.Unit/bin/Release/net10.0
-dotnet Archon.Tests.Unit.dll
+cd ArchonAnalysers.Tests.Unit/bin/Release/net10.0
+dotnet ArchonAnalysers.Tests.Unit.dll
 ```
 
 Note: The test project uses xunit.v3, not TUnit as previously documented.
@@ -29,14 +29,14 @@ Note: The test project uses xunit.v3, not TUnit as previously documented.
 ### Packaging
 ```bash
 cd src
-dotnet pack ./Archon/Archon.csproj -o ./artifacts
+dotnet pack ./ArchonAnalysers/ArchonAnalysers.csproj -o ./artifacts
 ```
 
 ## Architecture
 
 ### Roslyn Analyser Structure
 
-Archon is a **Roslyn DiagnosticAnalyzer** project targeting .NET Standard 2.0 for broad compatibility. Key architectural points:
+ArchonAnalysers is a **Roslyn DiagnosticAnalyzer** project targeting .NET Standard 2.0 for broad compatibility. Key architectural points:
 
 - **Analyser Registration**: Analysers use `RegisterSymbolAction` with `SymbolKind.NamedType` to analyse type declarations during compilation
 - **Namespace Pattern Matching**: Uses regex to match namespace patterns (e.g., `*.Internal*` for ARCHON001)
@@ -66,13 +66,13 @@ Both analysers follow this structure:
 ## Implemented Analysers
 
 ### ARCHON001: Internals Are Internal
-- **File**: `src/Archon/Analyzers/InternalsAreInternalAnalyzer.cs`
+- **File**: `src/ArchonAnalysers/Analyzers/ARCHON001/InternalsAreInternalAnalyzer.cs`
 - **Pattern**: Types in `*.Internal*` namespaces must be `internal`, `private`, or `private protected`
 - **Severity**: Error
 - **Key Implementation**: Recursive masking logic - if a containing type is already internal/private, nested types are exempt
 
 ### ARCHON002: Publics Are Public
-- **File**: `src/Archon/Analyzers/PublicsArePublicAnalyzer.cs`
+- **File**: `src/ArchonAnalysers/Analyzers/ARCHON002/PublicsArePublicAnalyzer.cs`
 - **Pattern**: Top-level types in `*.Public*` namespaces must be `public`, `protected`, or `protected internal`
 - **Severity**: Warning
 - **Key Implementation**: Only checks top-level types (no nesting logic needed)

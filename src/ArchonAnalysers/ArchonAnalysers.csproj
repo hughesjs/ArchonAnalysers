@@ -22,15 +22,15 @@
 
   <!-- Package Metadata -->
   <PropertyGroup>
-    <PackageId>Archon</PackageId>
+    <PackageId>ArchonAnalysers</PackageId>
     <Version>0.1.0</Version>
     <Authors>James Hughes</Authors>
     <Company>James Hughes</Company>
     <Description>Roslyn analysers for enforcing architectural rules in C# projects</Description>
     <Copyright>Copyright (c) 2025 James Hughes</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/hughesjs/archon</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/hughesjs/archon</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/hughesjs/ArchonAnalysers</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hughesjs/ArchonAnalysers</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>roslyn;analyser;architecture;rules;csharp</PackageTags>
@@ -38,7 +38,7 @@
 
   <!-- Roslyn Analyzer Dependencies -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -46,7 +46,7 @@
 
   <!-- InternalsVisibleTo for Testing -->
   <ItemGroup>
-    <InternalsVisibleTo Include="Archon.Tests.Unit"/>
+    <InternalsVisibleTo Include="ArchonAnalysers.Tests.Unit"/>
   </ItemGroup>
 
   <!-- Package Contents -->
@@ -58,5 +58,18 @@
     <!-- Package analyzer assemblies -->
     <None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
+
+  <!-- Custom Target: Include FixProviders DLL in NuGet Package -->
+  <Target Name="IncludeFixProvidersInPackage" AfterTargets="Build" BeforeTargets="_GetPackageFiles">
+    <ItemGroup>
+      <!-- Include FixProviders DLL from its build output directory -->
+      <None Include="..\ArchonAnalysers.FixProviders\bin\$(Configuration)\netstandard2.0\ArchonAnalysers.FixProviders.dll"
+            Pack="true"
+            PackagePath="analyzers/dotnet/cs"
+            Visible="false"
+            Condition="Exists('..\ArchonAnalysers.FixProviders\bin\$(Configuration)\netstandard2.0\ArchonAnalysers.FixProviders.dll')" />
+    </ItemGroup>
+    <Message Text="Including FixProviders DLL in package from: ..\ArchonAnalysers.FixProviders\bin\$(Configuration)\netstandard2.0\ArchonAnalysers.FixProviders.dll" Importance="high" />
+  </Target>
 
 </Project>

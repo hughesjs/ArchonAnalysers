@@ -1,9 +1,9 @@
-using Archon.Analyzers;
+using ArchonAnalysers.Analyzers.ARCHON002;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Xunit;
 
-namespace Archon.Tests.Unit.Analyzers;
+namespace ArchonAnalysers.Tests.Unit.Analyzers.ARCHON002;
 
 public class PublicsArePublicAnalyzerTests
 {
@@ -106,11 +106,11 @@ public class PublicsArePublicAnalyzerTests
     [Fact]
     public async Task NoDiagnosticOnInternalClassInPublicNamespaceContainingSectionWithInternalSlugFragment()
     {
-        const string testCode = """
-                                namespace TestApp.Public.InternalStuff;
-                                internal class MyClass;
-                                """;
-        CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        const string testCode = $$"""
+                                  namespace TestApp.Public.InternalStuff;
+                                  {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class MyClass;
+                                  """;
+        CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
         await test.RunAsync(TestContext.Current.CancellationToken);
     }
 

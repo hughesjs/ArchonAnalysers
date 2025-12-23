@@ -4,7 +4,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-namespace Archon.Analyzers;
+
+namespace ArchonAnalysers.Analyzers.ARCHON001;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class InternalsAreInternalAnalyzer : DiagnosticAnalyzer

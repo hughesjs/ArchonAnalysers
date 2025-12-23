@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Archon.Analyzers;
+namespace ArchonAnalysers.Analyzers.ARCHON002;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
