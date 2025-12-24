@@ -77,5 +77,5 @@ public class PublicsArePublicFixProvider : CodeFixProvider
         return newNode;
     }
 
-
+    public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 }
