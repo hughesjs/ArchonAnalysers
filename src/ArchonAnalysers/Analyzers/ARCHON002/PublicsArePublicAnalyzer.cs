@@ -16,15 +16,14 @@ public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
 	private static readonly LocalizableString Title = "Types in public namespaces should be public or protected";
 	private static readonly LocalizableString MessageFormat = "Type {0} should be public or protected due to being in namespace {1} but is {2}";
 	private static readonly LocalizableString Description =
-		"This rule validates that all types in defined public namespaces have public, protected, or protected internal access modifiers";
+		"This rule validates that all types in defined public namespaces have public, protected, or protected internal access modifiers.";
 
 	private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
-	// TODO - Grab this from config eventually
-	private const string PublicNamespaceSlug = "Public";
-
+	private const string EditorConfigKey = "archon_002.public_namespace_slugs";
+	private const string DefaultNamespaceSlugs = "Public";
 
 	public override void Initialize(AnalysisContext context)
 	{
@@ -36,9 +35,12 @@ public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
 
 	private void AnalyzeSymbol(SymbolAnalysisContext context)
 	{
+		string[] slugs = GetNamespaceSlugs(context);
+		string pattern = BuildNamespacePattern(slugs);
+
 		INamespaceSymbol? symbolNamespace = context.Symbol.ContainingNamespace;
 
-		if (SymbolIsInIrrelevantNamespace(symbolNamespace))
+		if (SymbolIsInIrrelevantNamespace(symbolNamespace, pattern))
 		{
 			return;
 		}
@@ -59,6 +61,45 @@ public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
 		}
 
 		CreateDiagnosticForProblematicSymbol(symbol, context);
+	}
+
+	private static string[] GetNamespaceSlugs(SymbolAnalysisContext context)
+	{
+		SyntaxTree? syntaxTree = context.Symbol.DeclaringSyntaxReferences.FirstOrDefault()?.SyntaxTree;
+		if (syntaxTree == null)
+		{
+			return DefaultNamespaceSlugs.Split(',');
+		}
+
+		AnalyzerConfigOptions options = context.Options.AnalyzerConfigOptionsProvider.GetOptions(syntaxTree);
+
+		if (options.TryGetValue(EditorConfigKey, out string? configValue) && !string.IsNullOrWhiteSpace(configValue))
+		{
+			return configValue
+				.Split(',')
+				.Select(s => s.Trim())
+				.Where(s => !string.IsNullOrWhiteSpace(s))
+				.ToArray();
+		}
+
+		return DefaultNamespaceSlugs.Split(',');
+	}
+
+	private static string BuildNamespacePattern(string[] slugs)
+	{
+		if (slugs.Length == 0)
+		{
+			return string.Empty;
+		}
+
+		if (slugs.Length == 1)
+		{
+			return $@"^(?:\w+\.)*(?<Slug>{Regex.Escape(slugs[0])})(?:\.\w+)*$";
+		}
+
+		IEnumerable<string> escapedSlugs = slugs.Select(Regex.Escape);
+		string alternation = string.Join("|", escapedSlugs);
+		return $@"^(?:\w+\.)*(?<Slug>{alternation})(?:\.\w+)*$";
 	}
 
 	private void CreateDiagnosticForProblematicSymbol(ISymbol symbol, SymbolAnalysisContext context)
@@ -91,9 +132,9 @@ public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
 		                                 Accessibility.Protected or
 		                                 Accessibility.ProtectedOrInternal;
 
-	private static bool SymbolIsInIrrelevantNamespace(INamespaceSymbol? symbolNamespace) =>
+	private static bool SymbolIsInIrrelevantNamespace(INamespaceSymbol? symbolNamespace, string pattern) =>
 		symbolNamespace is null ||
 		symbolNamespace.IsGlobalNamespace ||
-        !Regex.IsMatch(symbolNamespace.ToDisplayString(),
-            @$"^(?:\w+\.)*(?<Slug>{PublicNamespaceSlug})(?:\.\w+)*$");
+		string.IsNullOrEmpty(pattern) ||
+		!Regex.IsMatch(symbolNamespace.ToDisplayString(), pattern);
 }

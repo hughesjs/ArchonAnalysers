@@ -43,14 +43,52 @@ Once installed, the analysers will automatically run during compilation and high
 
 ## Configuration
 
+### Customising Namespace Patterns
+
+Both analysers support customising which namespace patterns trigger the rules via `.editorconfig`:
+
+#### ARCHON001: Internal Namespace Slugs
+
+```editorconfig
+[*.cs]
+# Single namespace slug (default: Internal)
+archon_001.internal_namespace_slugs = Internal
+
+# Multiple namespace slugs
+archon_001.internal_namespace_slugs = Internal, Private, Hidden, Impl
+```
+
+Types in namespaces matching `*.Internal.*`, `*.Private.*`, `*.Hidden.*`, or `*.Impl.*` must be internal, private, or private protected.
+
+#### ARCHON002: Public Namespace Slugs
+
+```editorconfig
+[*.cs]
+# Single namespace slug (default: Public)
+archon_002.public_namespace_slugs = Public
+
+# Multiple namespace slugs
+archon_002.public_namespace_slugs = Public, Api, Exposed, Contract
+```
+
+Top-level types in namespaces matching `*.Public.*`, `*.Api.*`, `*.Exposed.*`, or `*.Contract.*` must be public, protected, or protected internal.
+
+**Notes:**
+- Slugs are comma-separated with automatic whitespace trimming
+- Empty or missing configuration uses defaults ("Internal" for ARCHON001, "Public" for ARCHON002)
+- Slugs match complete namespace segments (e.g., "Internal" matches `App.Internal.Services` but not `App.InternalStuff`)
+- Special regex characters are automatically escaped
+
+### Severity Configuration
+
 Configure severity levels in your `.editorconfig`:
 
 ```editorconfig
 [*.cs]
-# Enforce internal types in .Internal namespaces (default: error)
+# Enforce internal types in configured namespaces (default: error)
 dotnet_diagnostic.ARCHON001.severity = error
 
-# Enforce public types in .Public namespaces (default: warning)
+# Enforce public types in configured namespaces (default: warning)
 dotnet_diagnostic.ARCHON002.severity = warning
 ```
 

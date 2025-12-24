@@ -1,0 +1,199 @@
+using ArchonAnalysers.Analyzers.ARCHON001;
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
+using Xunit;
+
+namespace ArchonAnalysers.Tests.Unit.Analyzers.ARCHON001;
+
+public class InternalsAreInternalAnalyzerConfigurationTests
+{
+	[Fact]
+	public async Task CustomSingleSlug_TriggersOnConfiguredNamespace()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Private;
+		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs = Private
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task CustomSingleSlug_DoesNotTriggerOnDefaultNamespace()
+	{
+		const string testCode = """
+		                        namespace TestApp.Internal;
+		                        public class MyClass;
+		                        """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs = Private
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task MultipleSlugs_TriggersOnAllConfiguredNamespaces()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Private
+		                          {
+		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class PrivateClass;
+		                          }
+
+		                          namespace TestApp.Hidden
+		                          {
+		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class HiddenClass;
+		                          }
+
+		                          namespace TestApp.Secret
+		                          {
+		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class SecretClass;
+		                          }
+		                          """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs = Private, Hidden, Secret
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task MultipleSlugs_DoesNotTriggerOnNonConfiguredNamespace()
+	{
+		const string testCode = """
+		                        namespace TestApp.Public;
+		                        public class MyClass;
+		                        """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs = Private, Hidden
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task NoConfiguration_UsesDefaultInternalSlug()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Internal;
+		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          """;
+
+		// No editorconfig file added - should use default "Internal"
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task EmptyConfiguration_UsesDefaultInternalSlug()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Internal;
+		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs =
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task WhitespaceInConfiguration_IsProperlyTrimmed()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Private
+		                          {
+		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class PrivateClass;
+		                          }
+
+		                          namespace TestApp.Hidden
+		                          {
+		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class HiddenClass;
+		                          }
+		                          """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs = Private ,  Hidden  ,   Internal
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+
+	[Fact]
+	public async Task SlugWithSpecialRegexCharacters_IsProperlyEscaped()
+	{
+		const string testCode = $$"""
+		                          namespace TestApp.Internal.Impl;
+		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          """;
+
+		const string editorConfig = """
+		                            [*.cs]
+		                            archon_001.internal_namespace_slugs = Internal.Impl
+		                            """;
+
+		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		{
+			TestCode = testCode
+		};
+
+		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
+		await test.RunAsync(TestContext.Current.CancellationToken);
+	}
+}

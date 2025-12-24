@@ -23,9 +23,8 @@ public class InternalsAreInternalAnalyzer : DiagnosticAnalyzer
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
-    // TODO - Grab this from config eventually
-    private const string InternalNamespaceSlug = "Internal";
-
+    private const string EditorConfigKey = "archon_001.internal_namespace_slugs";
+    private const string DefaultNamespaceSlugs = "Internal";
 
     public override void Initialize(AnalysisContext context)
     {
@@ -37,9 +36,12 @@ public class InternalsAreInternalAnalyzer : DiagnosticAnalyzer
 
     private static void AnalyzeSymbol(SymbolAnalysisContext obj)
     {
+        string[] slugs = GetNamespaceSlugs(obj);
+        string pattern = BuildNamespacePattern(slugs);
+
         INamespaceSymbol? symbolNamespace = obj.Symbol.ContainingNamespace;
 
-        if (SymbolIsInIrrelevantNamespace(symbolNamespace))
+        if (SymbolIsInIrrelevantNamespace(symbolNamespace, pattern))
         {
             return;
         }
@@ -57,6 +59,45 @@ public class InternalsAreInternalAnalyzer : DiagnosticAnalyzer
         }
 
         CreateDiagnosticForProblematicSymbol(symbol, obj);
+    }
+
+    private static string[] GetNamespaceSlugs(SymbolAnalysisContext context)
+    {
+        SyntaxTree? syntaxTree = context.Symbol.DeclaringSyntaxReferences.FirstOrDefault()?.SyntaxTree;
+        if (syntaxTree == null)
+        {
+            return DefaultNamespaceSlugs.Split(',');
+        }
+
+        AnalyzerConfigOptions options = context.Options.AnalyzerConfigOptionsProvider.GetOptions(syntaxTree);
+
+        if (options.TryGetValue(EditorConfigKey, out string? configValue) && !string.IsNullOrWhiteSpace(configValue))
+        {
+            return configValue
+                .Split(',')
+                .Select(s => s.Trim())
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToArray();
+        }
+
+        return DefaultNamespaceSlugs.Split(',');
+    }
+
+    private static string BuildNamespacePattern(string[] slugs)
+    {
+        if (slugs.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        if (slugs.Length == 1)
+        {
+            return $@"^(?:\w+\.)*(?<Slug>{Regex.Escape(slugs[0])})(?:\.\w+)*$";
+        }
+
+        IEnumerable<string> escapedSlugs = slugs.Select(Regex.Escape);
+        string alternation = string.Join("|", escapedSlugs);
+        return $@"^(?:\w+\.)*(?<Slug>{alternation})(?:\.\w+)*$";
     }
 
     private static void CreateDiagnosticForProblematicSymbol(ISymbol symbol, SymbolAnalysisContext obj)
@@ -114,7 +155,8 @@ public class InternalsAreInternalAnalyzer : DiagnosticAnalyzer
     }
 
 
-    private static bool SymbolIsInIrrelevantNamespace(INamespaceSymbol? symbolNamespace) => symbolNamespace is null
+    private static bool SymbolIsInIrrelevantNamespace(INamespaceSymbol? symbolNamespace, string pattern) => symbolNamespace is null
                                                                                              || symbolNamespace.IsGlobalNamespace
-                                                                                             || !Regex.IsMatch(symbolNamespace.ToDisplayString(), @$"^(?:\w+\.)*(?<Slug>{InternalNamespaceSlug})(?:\.\w+)*$");
+                                                                                             || string.IsNullOrEmpty(pattern)
+                                                                                             || !Regex.IsMatch(symbolNamespace.ToDisplayString(), pattern);
 }
