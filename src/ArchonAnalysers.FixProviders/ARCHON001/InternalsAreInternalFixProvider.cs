@@ -16,7 +16,7 @@ namespace ArchonAnalysers.FixProviders.ARCHON001;
 [Shared]
 public class InternalsAreInternalFixProvider : CodeFixProvider
 {
-    public override ImmutableArray<string> FixableDiagnosticIds => [InternalsAreInternalAnalyzer.DiagnosticId];
+    public override ImmutableArray<string> FixableDiagnosticIds => [InternalsAreInternalAnalyser.DiagnosticId];
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

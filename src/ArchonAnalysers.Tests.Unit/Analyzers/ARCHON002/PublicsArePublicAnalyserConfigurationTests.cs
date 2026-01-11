@@ -5,14 +5,14 @@ using Xunit;
 
 namespace ArchonAnalysers.Tests.Unit.Analyzers.ARCHON002;
 
-public class PublicsArePublicAnalyzerConfigurationTests
+public class PublicsArePublicAnalyserConfigurationTests
 {
 	[Fact]
 	public async Task CustomSingleSlug_TriggersOnConfiguredNamespace()
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Api;
-		                          {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class MyClass;
+		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
 		                          """;
 
 		const string editorConfig = """
@@ -20,7 +20,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		                            archon_002.public_namespace_slugs = Api
 		                            """;
 
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -42,7 +42,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		                            archon_002.public_namespace_slugs = Api
 		                            """;
 
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -57,12 +57,12 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		const string testCode = $$"""
 		                          namespace TestApp.Api
 		                          {
-		                              {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class ApiClass;
+		                              {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class ApiClass;
 		                          }
 
 		                          namespace TestApp.Exposed
 		                          {
-		                              {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class ExposedClass;
+		                              {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class ExposedClass;
 		                          }
 		                          """;
 
@@ -71,7 +71,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		                            archon_002.public_namespace_slugs = Api, Exposed, Public
 		                            """;
 
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -93,7 +93,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		                            archon_002.public_namespace_slugs = Api, Exposed
 		                            """;
 
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -107,11 +107,11 @@ public class PublicsArePublicAnalyzerConfigurationTests
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Public;
-		                          {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class MyClass;
+		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
 		                          """;
 
 		// No editorconfig file added - should use default "Public"
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -124,7 +124,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Public;
-		                          {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class MyClass;
+		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
 		                          """;
 
 		const string editorConfig = """
@@ -132,7 +132,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		                            archon_002.public_namespace_slugs =
 		                            """;
 
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -146,7 +146,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Api;
-		                          {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} class MyClass;
+		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
 		                          """;
 
 		const string editorConfig = """
@@ -154,7 +154,7 @@ public class PublicsArePublicAnalyzerConfigurationTests
 		                            archon_002.public_namespace_slugs =  Api  ,  Public
 		                            """;
 
-		CSharpAnalyzerTest<PublicsArePublicAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};

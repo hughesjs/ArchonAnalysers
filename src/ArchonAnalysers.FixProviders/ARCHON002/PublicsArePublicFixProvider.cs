@@ -16,7 +16,7 @@ namespace ArchonAnalysers.FixProviders.ARCHON002;
 [Shared]
 public class PublicsArePublicFixProvider : CodeFixProvider
 {
-    public override ImmutableArray<string> FixableDiagnosticIds => [PublicsArePublicAnalyzer.DiagnosticId];
+    public override ImmutableArray<string> FixableDiagnosticIds => [PublicsArePublicAnalyser.DiagnosticId];
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

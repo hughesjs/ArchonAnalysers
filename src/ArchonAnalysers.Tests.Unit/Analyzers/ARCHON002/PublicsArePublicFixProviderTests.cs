@@ -18,7 +18,7 @@ public class PublicsArePublicFixProviderTests
     {
         string testCode = $$"""
                             namespace TestApp.Public;
-                            {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} {{typeKeyword}} MyType;
+                            {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} {{typeKeyword}} MyType;
                             """;
 
         string fixedCode = $$"""
@@ -26,7 +26,7 @@ public class PublicsArePublicFixProviderTests
                              public {{typeKeyword}} MyType;
                              """;
 
-        CSharpCodeFixTest<PublicsArePublicAnalyzer, PublicsArePublicFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<PublicsArePublicAnalyser, PublicsArePublicFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode
@@ -40,7 +40,7 @@ public class PublicsArePublicFixProviderTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Public;
-                                  {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} delegate void MyDelegate();
+                                  {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} delegate void MyDelegate();
                                   """;
 
         const string fixedCode = """
@@ -48,7 +48,7 @@ public class PublicsArePublicFixProviderTests
                                  public delegate void MyDelegate();
                                  """;
 
-        CSharpCodeFixTest<PublicsArePublicAnalyzer, PublicsArePublicFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<PublicsArePublicAnalyser, PublicsArePublicFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode
@@ -66,7 +66,7 @@ public class PublicsArePublicFixProviderTests
     {
         string testCode = $$"""
                             namespace TestApp.Public;
-                            {|{{PublicsArePublicAnalyzer.DiagnosticId}}:internal|} {{additionalModifiers}} {{typeDeclaration}} MyType;
+                            {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} {{additionalModifiers}} {{typeDeclaration}} MyType;
                             """;
 
         string fixedCode = $$"""
@@ -74,7 +74,7 @@ public class PublicsArePublicFixProviderTests
                              public {{additionalModifiers}} {{typeDeclaration}} MyType;
                              """;
 
-        CSharpCodeFixTest<PublicsArePublicAnalyzer, PublicsArePublicFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<PublicsArePublicAnalyser, PublicsArePublicFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode

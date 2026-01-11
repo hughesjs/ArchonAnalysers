@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ArchonAnalysers.Analyzers.ARCHON002;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class PublicsArePublicAnalyzer : DiagnosticAnalyzer
+public class PublicsArePublicAnalyser : DiagnosticAnalyzer
 {
 	public const string DiagnosticId = "ARCHON002";
 	private const string Category = "Architecture";

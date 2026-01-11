@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ArchonAnalysers.Tests.Unit.Analyzers.ARCHON003;
 
-public class ForbiddenReferencesAnalyzerTests
+public class ForbiddenReferencesAnalyserTests
 {
     [Fact]
     public async Task NoForbiddenReferencesConfigured_NoError()
@@ -18,7 +18,7 @@ public class ForbiddenReferencesAnalyzerTests
                                 public class MyClass;
                                 """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
 
         // Add a mock Domain reference but no configuration
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
@@ -39,7 +39,7 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->Domain, TestProject->Application
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
 
         // Add an allowed reference (not in forbidden list)
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Infrastructure"));
@@ -61,12 +61,12 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->Domain
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -89,7 +89,7 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = Contracts->Domain
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode
             // No diagnostics expected because current assembly is "test0" not "Contracts"
@@ -114,13 +114,13 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->Domain, TestProject->Application
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error),
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error),
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -144,12 +144,12 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->domain
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -173,12 +173,12 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->Domain
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -202,12 +202,12 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->Domain.dll
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -230,12 +230,12 @@ public class ForbiddenReferencesAnalyzerTests
                                     archon_003.forbidden_references = TestProject->Domain, TestProject->Application
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 

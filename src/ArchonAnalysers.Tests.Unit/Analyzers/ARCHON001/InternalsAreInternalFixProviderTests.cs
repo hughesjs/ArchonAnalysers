@@ -18,7 +18,7 @@ public class InternalsAreInternalFixProviderTests
     {
         string testCode = $$"""
                             namespace TestApp.Internal;
-                            {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} {{typeKeyword}} MyType;
+                            {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} {{typeKeyword}} MyType;
                             """;
 
         string fixedCode = $$"""
@@ -26,7 +26,7 @@ public class InternalsAreInternalFixProviderTests
                              internal {{typeKeyword}} MyType;
                              """;
 
-        CSharpCodeFixTest<InternalsAreInternalAnalyzer, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<InternalsAreInternalAnalyser, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode
@@ -40,7 +40,7 @@ public class InternalsAreInternalFixProviderTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} delegate void MyDelegate();
+                                  {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} delegate void MyDelegate();
                                   """;
 
         const string fixedCode = """
@@ -48,7 +48,7 @@ public class InternalsAreInternalFixProviderTests
                                  internal delegate void MyDelegate();
                                  """;
 
-        CSharpCodeFixTest<InternalsAreInternalAnalyzer, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<InternalsAreInternalAnalyser, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode
@@ -61,29 +61,29 @@ public class InternalsAreInternalFixProviderTests
     {
         const string testCode = $$"""
                                   namespace TestApp.Internal;
-                                  {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                  {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class OuterClass
                                   {
-                                      {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:protected|} internal class MyClass;
+                                      {|{{InternalsAreInternalAnalyser.DiagnosticId}}:protected|} internal class MyClass;
                                   }
                                   """;
 
         const string fixedCode = $$"""
                                    namespace TestApp.Internal;
-                                   {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class OuterClass
+                                   {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class OuterClass
                                    {
                                        internal class MyClass;
                                    }
                                    """;
 
         // This is brittle as fuck
-        DiagnosticResult expectedRemainingDiagnostic = DiagnosticResult.CompilerError(InternalsAreInternalAnalyzer.DiagnosticId).WithSpan(2, 1, 2, 7)
+        DiagnosticResult expectedRemainingDiagnostic = DiagnosticResult.CompilerError(InternalsAreInternalAnalyser.DiagnosticId).WithSpan(2, 1, 2, 7)
             .WithArguments("OuterClass", "TestApp.Internal", "Public");
 
-        CSharpCodeFixTest<InternalsAreInternalAnalyzer, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<InternalsAreInternalAnalyser, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode,
-            CodeActionEquivalenceKey = $"{InternalsAreInternalAnalyzer.DiagnosticId}:[58..67)", // This is brittle as fuck
+            CodeActionEquivalenceKey = $"{InternalsAreInternalAnalyser.DiagnosticId}:[58..67)", // This is brittle as fuck
             FixedState = { ExpectedDiagnostics = { expectedRemainingDiagnostic }}
         };
         await test.RunAsync(TestContext.Current.CancellationToken);
@@ -98,7 +98,7 @@ public class InternalsAreInternalFixProviderTests
     {
         string testCode = $$"""
                             namespace TestApp.Internal;
-                            {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} {{additionalModifiers}} {{typeDeclaration}} MyType;
+                            {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} {{additionalModifiers}} {{typeDeclaration}} MyType;
                             """;
 
         string fixedCode = $$"""
@@ -106,7 +106,7 @@ public class InternalsAreInternalFixProviderTests
                              internal {{additionalModifiers}} {{typeDeclaration}} MyType;
                              """;
 
-        CSharpCodeFixTest<InternalsAreInternalAnalyzer, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
+        CSharpCodeFixTest<InternalsAreInternalAnalyser, InternalsAreInternalFixProvider, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             FixedCode = fixedCode

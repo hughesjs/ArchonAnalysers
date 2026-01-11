@@ -5,14 +5,14 @@ using Xunit;
 
 namespace ArchonAnalysers.Tests.Unit.Analyzers.ARCHON001;
 
-public class InternalsAreInternalAnalyzerConfigurationTests
+public class InternalsAreInternalAnalyserConfigurationTests
 {
 	[Fact]
 	public async Task CustomSingleSlug_TriggersOnConfiguredNamespace()
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Private;
-		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class MyClass;
 		                          """;
 
 		const string editorConfig = """
@@ -20,7 +20,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs = Private
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -42,7 +42,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs = Private
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -57,17 +57,17 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		const string testCode = $$"""
 		                          namespace TestApp.Private
 		                          {
-		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class PrivateClass;
+		                              {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class PrivateClass;
 		                          }
 
 		                          namespace TestApp.Hidden
 		                          {
-		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class HiddenClass;
+		                              {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class HiddenClass;
 		                          }
 
 		                          namespace TestApp.Secret
 		                          {
-		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class SecretClass;
+		                              {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class SecretClass;
 		                          }
 		                          """;
 
@@ -76,7 +76,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs = Private, Hidden, Secret
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -98,7 +98,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs = Private, Hidden
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -112,11 +112,11 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Internal;
-		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class MyClass;
 		                          """;
 
 		// No editorconfig file added - should use default "Internal"
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -129,7 +129,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Internal;
-		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class MyClass;
 		                          """;
 
 		const string editorConfig = """
@@ -137,7 +137,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs =
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -152,12 +152,12 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		const string testCode = $$"""
 		                          namespace TestApp.Private
 		                          {
-		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class PrivateClass;
+		                              {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class PrivateClass;
 		                          }
 
 		                          namespace TestApp.Hidden
 		                          {
-		                              {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class HiddenClass;
+		                              {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class HiddenClass;
 		                          }
 		                          """;
 
@@ -166,7 +166,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs = Private ,  Hidden  ,   Internal
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};
@@ -180,7 +180,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 	{
 		const string testCode = $$"""
 		                          namespace TestApp.Internal.Impl;
-		                          {|{{InternalsAreInternalAnalyzer.DiagnosticId}}:public|} class MyClass;
+		                          {|{{InternalsAreInternalAnalyser.DiagnosticId}}:public|} class MyClass;
 		                          """;
 
 		const string editorConfig = """
@@ -188,7 +188,7 @@ public class InternalsAreInternalAnalyzerConfigurationTests
 		                            archon_001.internal_namespace_slugs = Internal.Impl
 		                            """;
 
-		CSharpAnalyzerTest<InternalsAreInternalAnalyzer, DefaultVerifier> test = new()
+		CSharpAnalyzerTest<InternalsAreInternalAnalyser, DefaultVerifier> test = new()
 		{
 			TestCode = testCode
 		};

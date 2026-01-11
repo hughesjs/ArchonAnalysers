@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ArchonAnalysers.Tests.Unit.Analyzers.ARCHON003;
 
-public class ForbiddenReferencesAnalyzerConfigurationTests
+public class ForbiddenReferencesAnalyserConfigurationTests
 {
     [Fact]
     public async Task CustomSingleForbiddenReference_TriggersOnConfiguredAssembly()
@@ -23,12 +23,12 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references = TestProject->CustomDomain
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -51,7 +51,7 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references = TestProject->CustomDomain
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
 
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain")); // Different name
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
@@ -72,14 +72,14 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references = TestProject->Domain, TestProject->Application, TestProject->Infrastructure
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error),
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error),
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error),
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error),
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -104,7 +104,7 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references = TestProject->Domain, TestProject->Application
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
 
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Infrastructure"));
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Utilities"));
@@ -126,7 +126,7 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references =
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new() { TestCode = testCode };
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
 
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Application"));
@@ -148,13 +148,13 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references =  TestProject -> Domain  ,  TestProject  ->  Application
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error),
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error),
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 
@@ -178,13 +178,13 @@ public class ForbiddenReferencesAnalyzerConfigurationTests
                                     archon_003.forbidden_references = TestProject->Domain.dll, TestProject->Application.dll
                                     """;
 
-        CSharpAnalyzerTest<ForbiddenReferencesAnalyzer, DefaultVerifier> test = new()
+        CSharpAnalyzerTest<ForbiddenReferencesAnalyser, DefaultVerifier> test = new()
         {
             TestCode = testCode,
             ExpectedDiagnostics =
             {
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error),
-                new(ForbiddenReferencesAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error),
+                new(ForbiddenReferencesAnalyser.DiagnosticId, DiagnosticSeverity.Error)
             }
         };
 

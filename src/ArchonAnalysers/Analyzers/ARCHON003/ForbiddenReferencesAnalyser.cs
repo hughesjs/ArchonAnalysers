@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ArchonAnalysers.Analyzers.ARCHON003;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class ForbiddenReferencesAnalyzer : DiagnosticAnalyzer
+public class ForbiddenReferencesAnalyser : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "ARCHON003";
     private const string Category = "Architecture";
