@@ -32,7 +32,7 @@ public class InternalsAreInternalFixProviderTests
             FixedCode = fixedCode
         };
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class InternalsAreInternalFixProviderTests
             TestCode = testCode,
             FixedCode = fixedCode
         };
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class InternalsAreInternalFixProviderTests
             CodeActionEquivalenceKey = $"{InternalsAreInternalAnalyser.DiagnosticId}:[58..67)", // This is brittle as fuck
             FixedState = { ExpectedDiagnostics = { expectedRemainingDiagnostic }}
         };
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Theory]
@@ -112,7 +112,7 @@ public class InternalsAreInternalFixProviderTests
             FixedCode = fixedCode
         };
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 }
 

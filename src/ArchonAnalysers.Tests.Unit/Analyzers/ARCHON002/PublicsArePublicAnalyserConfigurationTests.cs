@@ -26,7 +26,7 @@ public class PublicsArePublicAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -48,7 +48,7 @@ public class PublicsArePublicAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -77,7 +77,7 @@ public class PublicsArePublicAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -99,7 +99,7 @@ public class PublicsArePublicAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -116,7 +116,7 @@ public class PublicsArePublicAnalyserConfigurationTests
 			TestCode = testCode
 		};
 
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -138,7 +138,7 @@ public class PublicsArePublicAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -160,6 +160,6 @@ public class PublicsArePublicAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 }

@@ -23,7 +23,7 @@ public class ForbiddenReferencesAnalyserTests
         // Add a mock Domain reference but no configuration
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Infrastructure"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -128,7 +128,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Application"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -157,7 +157,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -186,7 +186,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Domain"));
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -243,7 +243,7 @@ public class ForbiddenReferencesAnalyserTests
         test.TestState.AdditionalReferences.Add(CreateMockAssembly("Infrastructure")); // Allowed
         test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     private static MetadataReference CreateMockAssembly(string name, string code = "")

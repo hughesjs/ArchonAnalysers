@@ -26,7 +26,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -48,7 +48,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -82,7 +82,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -104,7 +104,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -121,7 +121,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 			TestCode = testCode
 		};
 
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -143,7 +143,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -172,7 +172,7 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -194,6 +194,6 @@ public class InternalsAreInternalAnalyserConfigurationTests
 		};
 
 		test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 }

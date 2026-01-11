@@ -15,4 +15,8 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" PrivateAssets="all" />
     </ItemGroup>
 
+    <ItemGroup>
+      <InternalsVisibleTo Include="ArchonAnalysers.Tests.Unit" />
+    </ItemGroup>
+
 </Project>

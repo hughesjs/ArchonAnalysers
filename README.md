@@ -46,6 +46,19 @@ Prevents specified projects from referencing forbidden assemblies at compile tim
 - **Matching**: Simple assembly name, case-insensitive, .dll extension optional
 - **Scope**: Global configuration in single EditorConfig
 
+#### Code Fix
+
+ARCHON003 provides a code fix that automatically removes forbidden `<ProjectReference>` entries from `.csproj` files.
+
+**Limitations:**
+- Only works for SDK-style projects (`.csproj` with `<Project Sdk="...">`)
+- Only removes `<ProjectReference>` elements (not `<PackageReference>` or `<Reference>`)
+- Assumes project name matches assembly name
+- Fix available from Error List window (not in-editor, due to compilation-level diagnostics)
+- Requires project reload in IDE after applying fix
+
+**To use:** Right-click the diagnostic in the Error List and select "Remove project reference to [AssemblyName]"
+
 ## Usage
 
 Once installed, the analysers will automatically run during compilation and highlight violations in your IDE.

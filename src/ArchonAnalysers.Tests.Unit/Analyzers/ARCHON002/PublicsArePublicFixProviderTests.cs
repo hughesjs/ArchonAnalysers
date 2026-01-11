@@ -32,7 +32,7 @@ public class PublicsArePublicFixProviderTests
             FixedCode = fixedCode
         };
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class PublicsArePublicFixProviderTests
             FixedCode = fixedCode
         };
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
     [Theory]
@@ -80,6 +80,6 @@ public class PublicsArePublicFixProviderTests
             FixedCode = fixedCode
         };
 
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 }

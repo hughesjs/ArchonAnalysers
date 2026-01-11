@@ -15,7 +15,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -26,7 +26,7 @@ public class PublicsArePublicAnalyserTests
 		                        public class MyClass;
 		                        """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -45,7 +45,7 @@ public class PublicsArePublicAnalyserTests
 		                        }
 		                        """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -56,7 +56,7 @@ public class PublicsArePublicAnalyserTests
 		                        internal class MyClass;
 		                        """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -67,7 +67,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} record MyRecord;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -78,7 +78,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} struct MyStruct;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -89,7 +89,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} interface IMyInterface;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -100,7 +100,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} enum MyEnum;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
     [Fact]
@@ -111,7 +111,7 @@ public class PublicsArePublicAnalyserTests
                                   {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
                                   """;
         CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-        await test.RunAsync(TestContext.Current.CancellationToken);
+        await test.RunAsync(CancellationToken.None);
     }
 
 	[Fact]
@@ -122,7 +122,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -133,7 +133,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} delegate void MyDelegate();
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -144,7 +144,7 @@ public class PublicsArePublicAnalyserTests
 		                        public delegate void MyDelegate();
 		                        """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -155,7 +155,7 @@ public class PublicsArePublicAnalyserTests
 		                          {|{{PublicsArePublicAnalyser.DiagnosticId}}:internal|} class MyClass<T>;
 		                          """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -166,7 +166,7 @@ public class PublicsArePublicAnalyserTests
 		                        public class MyClass<T>;
 		                        """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 
 	[Fact]
@@ -177,6 +177,6 @@ public class PublicsArePublicAnalyserTests
 		                        internal class MyClass;
 		                        """;
 		CSharpAnalyzerTest<PublicsArePublicAnalyser, DefaultVerifier> test = new() { TestCode = testCode };
-		await test.RunAsync(TestContext.Current.CancellationToken);
+		await test.RunAsync(CancellationToken.None);
 	}
 }

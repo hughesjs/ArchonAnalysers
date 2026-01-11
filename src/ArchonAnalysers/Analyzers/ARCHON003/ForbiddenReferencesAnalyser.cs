@@ -81,7 +81,15 @@ public class ForbiddenReferencesAnalyser : DiagnosticAnalyzer
                 continue;
             }
 
-            Diagnostic diagnostic = Diagnostic.Create(Rule, Location.None, currentAssembly, assemblyName);
+            ImmutableDictionary<string, string?>.Builder properties = ImmutableDictionary.CreateBuilder<string, string?>();
+            properties.Add("ForbiddenAssembly", assemblyName);
+
+            Diagnostic diagnostic = Diagnostic.Create(
+                Rule,
+                Location.None,
+                properties.ToImmutable(),
+                currentAssembly,
+                assemblyName);
             context.ReportDiagnostic(diagnostic);
         }
     }
